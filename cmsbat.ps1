@@ -106,7 +106,7 @@ $shortcutPath = "C:\Users\kassir\Desktop\newCMS.lnk"
 # $iconPath = (Get-Item -Path ".\cms.ico").FullName
 
 # URl іконки
-$iconURL = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms.ico?token=GHSAT0AAAAAACPSX54JZPYJSJ7NA5JDCQMMZPTJPOA"
+$iconURL = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms.ico"
 
 # Шлях збереження іконки
 $iconPath = "C:\Users\kassir\Downloads\cms.ico"

@@ -6,7 +6,7 @@ function TestAdminRights {
 }
 
 if (-not (TestAdminRights)) {
-    Write-Host ">> This script must be run as admin."
+    Write-Host ">> This script must be run as admin." -ForegroundColor Red
     Pause
     Exit
 }
@@ -28,13 +28,13 @@ $actualPath;
 
 # Перевіряємо наявність ЦМСа
 if (Test-Path $pathCMS -PathType Container) {
-    Write-Host ">> Found CMS"
+    Write-Host ">> Found CMS"  -ForegroundColor Green
     $isCMSInstalled = $true;
 }
 
 # Перевіряємо наявність Полівіжн/ЦМСа
 if (Test-Path $pathPolyvision -PathType Container) {
-    Write-Host ">> Found Polyvision/CMS"
+    Write-Host ">> Found Polyvision/CMS"  -ForegroundColor Green
     $isPolyvisionInstalled = $true;
 } 
 
@@ -50,12 +50,12 @@ if ($isCMSInstalled -and -not $isPolyvisionInstalled) {
     $actualPath = $pathPolyvision
 } elseif (-not $isCMSInstalled -and -not $isPolyvisionInstalled) {
     # Якщо не встановлено нічого - виводимо помилку
-    Write-Host ">> No CMS or Polyvision/CMS found! Exiting the script."
+    Write-Host ">> No CMS or Polyvision/CMS found! Exiting the script."  -ForegroundColor Red
     Pause
     Exit
 } elseif ($isCMSInstalled -and $isPolyvisionInstalled) {
     # Якщо встановлені обидві - виводимо помилку
-    Write-Host ">> Both CMS and Polyvision/CMS found! Remove one of them and rerun the script. Exiting the script."
+    Write-Host ">> Both CMS and Polyvision/CMS found! Remove one of them and rerun the script. Exiting the script."  -ForegroundColor Red
     Pause
     Exit
 }
@@ -65,7 +65,7 @@ if ($isCMSInstalled -and -not $isPolyvisionInstalled) {
 # Перевірка існування bat-файлу перед його створенням
 $batFilePath = $actualPath + 'CMS.bat'
 if (Test-Path $batFilePath -PathType Leaf) {
-    Write-Host ">> Bat-file is already exist. Exiting the script."
+    Write-Host ">> Bat-file is already exist. Remove it and rerun the script. Exiting the script."  -ForegroundColor Red
     Pause
     Exit
 }
@@ -77,7 +77,7 @@ $code = 'cmd /min /C "set __COMPAT_LAYER=RUNASINVOKER && start "" "' + $actualPa
 
 # Створюємо файл
 Set-Content -Path $batFilePath -Value $code
-Write-Host ">> File created"
+Write-Host ">> File created" -ForegroundColor Yellow
 
 
 
@@ -117,9 +117,9 @@ Invoke-WebRequest -Uri $iconURL -OutFile $iconPath
 # Створення ярлика
 CreateShortcut -TargetPath $batFilePath -ShortcutPath $shortcutPath -IconPath $iconPath
 
-Write-Host ">> Shortcut created on the Desktop."
+Write-Host ">> Shortcut created on the Desktop." -ForegroundColor Yellow
 
-
+Write-Host ">> DONE!" -ForegroundColor Green
 
 Pause
 Exit

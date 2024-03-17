@@ -81,43 +81,60 @@ Write-Host ">> File created" -ForegroundColor Yellow
 
 
 
-# Створення ярлика
-function CreateShortcut {
-    param (
-        [string]$TargetPath,
-        [string]$ShortcutPath,
-        [string]$IconPath
-    )
+# Визначаємо шлях до екзешніка та батніка
+$oldExePath = $actualPath + "CMS.exe"
+$newBatPath = $actualPath +"CMS.bat"
 
-    $WshShell = New-Object -ComObject WScript.Shell
-    $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
-    $Shortcut.TargetPath = $TargetPath
-    $Shortcut.IconLocation = $IconPath
-    $Shortcut.Save()
+# Отримуємо шлях до робочого столу і збираємо в масив всі ярлики
+$desktopPath = [System.Environment]::GetFolderPath("Desktop")
+$desktopShortcuts = Get-ChildItem "$desktopPath\*.lnk" -Force
+
+foreach ($shortcut in $desktopShortcuts) {
+    $shell = New-Object -ComObject WScript.Shell
+    $shortcutTargetPath = $shell.CreateShortcut($shortcut.FullName).TargetPath
+    # Если цель ярлыка соответствует старому пути к .exe файлу, заменить ее на новый путь к .bat файлу
+    if ($shortcutTargetPath -eq $oldExePath) {
+        $shortcutObject = $shell.CreateShortcut($shortcut.FullName)
+        $shortcutObject.TargetPath = $newBatPath
+        $shortcutObject.Save()
+        Write-Host ">> Shortcut path succesfully changed." -ForegroundColor Green
+    }
 }
 
-# Шлях для збереження ярлика на робочому столі
-# $shortcutPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("Desktop"), "newCMS.lnk") 
-# $shortcutPath = [System.IO.Path]::Combine("$env:USERPROFILE\Desktop", "newCMS.lnk")
-$shortcutPath = "C:\Users\kassir\Desktop\newCMS.lnk"
+# Створення ярлика
+# function CreateShortcut {
+#     param (
+#         [string]$TargetPath,
+#         [string]$ShortcutPath,
+#         [string]$IconPath
+#     )
 
+#     $WshShell = New-Object -ComObject WScript.Shell
+#     $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+#     $Shortcut.TargetPath = $TargetPath
+#     $Shortcut.IconLocation = $IconPath
+#     $Shortcut.Save()
+# }
+
+# Шлях для збереження ярлика на робочому столі
+# $shortcutPath = "C:\Users\kassir\Desktop\newCMS.lnk"
 
 # Шлях до іконки
 # $iconPath = (Get-Item -Path ".\cms.ico").FullName
 
 # URl іконки
-$iconURL = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms.ico"
+# $iconURL = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms.ico" 
 
 # Шлях збереження іконки
-$iconPath = "C:\Users\kassir\Downloads\cms.ico"
+# $iconPath = "C:\Users\kassir\Downloads\cms.ico"
 
 # Завантаження іконки з GitHub
-Invoke-WebRequest -Uri $iconURL -OutFile $iconPath
+# Invoke-WebRequest -Uri $iconURL -OutFile $iconPath
 
 # Створення ярлика
-CreateShortcut -TargetPath $batFilePath -ShortcutPath $shortcutPath -IconPath $iconPath
+# CreateShortcut -TargetPath $batFilePath -ShortcutPath $shortcutPath -IconPath $iconPath
 
-Write-Host ">> Shortcut created on the Desktop." -ForegroundColor Yellow
+# Write-Host ">> Shortcut created on the Desktop." -ForegroundColor Yellow
 
 Write-Host ">> DONE!" -ForegroundColor Green
 

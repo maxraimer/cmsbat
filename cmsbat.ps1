@@ -13,6 +13,20 @@ if (-not (TestAdminRights)) {
 
 
 
+# Функція конвертації кирилиці в юнікод
+function ConvertTo-Encoding ([string]$From, [string]$To){
+    Begin{
+        $encFrom = [System.Text.Encoding]::GetEncoding($from)
+        $encTo = [System.Text.Encoding]::GetEncoding($to)
+    }
+    Process{
+        $bytes = $encTo.GetBytes($_)
+        $bytes = [System.Text.Encoding]::Convert($encFrom, $encTo, $bytes)
+        $encTo.GetString($bytes)
+    }
+}
+
+
 # Шляхи до папок
 $pathCMS = "C:\Program Files (x86)\CMS\"
 $pathPolyvision = "C:\Program Files (x86)\Polyvision\CMS\"
@@ -100,7 +114,7 @@ function CreateShortcut {
 }
 
 # Шлях для збереження ярлика на робочому столі
-$shortcutPath = "C:\Users\kassir\Desktop\КАМЕРЫ.lnk"
+$shortcutPath = "C:\Users\kassir\Desktop\КАМЕРЫ.lnk" | ConvertTo-Encoding "UTF-8" "windows-1251"
 
 # Шлях до іконки
 $iconPath = (Get-Item -Path ".\cms.ico").FullName
@@ -126,5 +140,4 @@ Write-Host ">> Shortcut created on the Desktop." -ForegroundColor Yellow
 
 Write-Host ">> DONE!" -ForegroundColor Green
 
-Pause
 Exit

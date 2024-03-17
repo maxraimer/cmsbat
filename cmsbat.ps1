@@ -20,6 +20,7 @@ $pathPolyvision = "C:\Program Files (x86)\Polyvision\CMS\"
 # Перевіряємо наявність програм
 $isCMSInstalled = $false
 $isPolyvisionInstalled = $false
+$actualProgram;
 
 # Актуальний шлях до актуальної програми
 $actualPath;
@@ -30,12 +31,14 @@ $actualPath;
 if (Test-Path $pathCMS -PathType Container) {
     Write-Host ">> Found CMS"  -ForegroundColor Green
     $isCMSInstalled = $true;
+    $actualProgram = "CMS";
 }
 
 # Перевіряємо наявність Полівіжн/ЦМСа
 if (Test-Path $pathPolyvision -PathType Container) {
     Write-Host ">> Found Polyvision/CMS"  -ForegroundColor Green
     $isPolyvisionInstalled = $true;
+    $actualProgram = "Polyvision/CMS";
 } 
 
 
@@ -109,8 +112,12 @@ $iconURLNewCMS = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms_ne
 # Шлях збереження іконки
 $iconPath = "C:\Users\kassir\Downloads\cms.ico"
 
-# Завантаження іконки з GitHub
-Invoke-WebRequest -Uri $iconURL -OutFile $iconPath
+# Завантаження іконки з GitHub відповідно до того, яка програма встановлена
+if ($actualProgram -eq "CMS") {
+    Invoke-WebRequest -Uri $iconURLOldCMS -OutFile $iconPath
+} elseif ($actualProgram -eq "Polyvision/CMS") {
+    Invoke-WebRequest -Uri $iconURLNewCMS -OutFile $iconPath
+}
 
 # Створення ярлика
 CreateShortcut -TargetPath $batFilePath -ShortcutPath $shortcutPath -IconPath $iconPath

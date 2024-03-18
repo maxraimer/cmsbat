@@ -117,7 +117,7 @@ function CreateShortcut {
 $shortcutPath = "C:\Users\kassir\Desktop\КАМЕРЫ.lnk" | ConvertTo-Encoding "UTF-8" "windows-1251"
 
 # Шлях до іконки
-$iconPath = (Get-Item -Path ".\cms.ico").FullName
+# $iconPath = (Get-Item -Path ".\cms.ico").FullName
 
 # URl іконки
 $iconURLOldCMS = "https://raw.githubusercontent.com/maxraimer/cmsbat/main/cms_old.ico"

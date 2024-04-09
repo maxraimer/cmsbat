@@ -61,7 +61,6 @@ if (Test-Path $pathPolyvision -PathType Container) {
 if ($isCMSInstalled -and -not $isPolyvisionInstalled) {
     # Якщо встановлений тільки ЦМС, встановлюємо його шлях як актуальний
     $actualPath = $pathCMS
-    
 } elseif (-not $isCMSInstalled -and $isPolyvisionInstalled) {
     # Якщо встановлений тільки Полівіжн/ЦМС, встановлюємо його шлях як актуальний
     $actualPath = $pathPolyvision
